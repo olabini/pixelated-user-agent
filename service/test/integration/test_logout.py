@@ -18,11 +18,10 @@ import json
 from mockito import verify
 from twisted.internet import defer
 
-from test.support.integration.multi_user_client import MultiUserClient
-from test.support.integration.soledad_test_base import SoledadTestBase
+from test.support.integration.soledad_test_base import MultiUserSoledadTestBase
 
 
-class MultiUserLogoutTest(MultiUserClient, SoledadTestBase):
+class MultiUserLogoutTest(MultiUserSoledadTestBase):
 
     @defer.inlineCallbacks
     def wait_for_session_user_id_to_finish(self):
@@ -35,8 +34,11 @@ class MultiUserLogoutTest(MultiUserClient, SoledadTestBase):
 
         yield self.wait_for_session_user_id_to_finish()
 
-        response, request = self.post("/logout", json.dumps({'csrftoken': [login_request.getCookie('XSRF-TOKEN')]}),
-                                      from_request=login_request, as_json=False)
+        response, request = self.app_test_client.post(
+            "/logout",
+            json.dumps({'csrftoken': [login_request.getCookie('XSRF-TOKEN')]}),
+            from_request=login_request,
+            as_json=False)
         yield response
 
         self.assertEqual(302, request.responseCode)     # redirected
