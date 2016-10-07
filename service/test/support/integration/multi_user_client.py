@@ -25,7 +25,6 @@ import pixelated.config.services
 from pixelated.resources.root_resource import RootResource
 from test.support.integration import AppTestClient
 from test.support.integration.app_test_client import AppTestAccount, StubSRPChecker
-import test.support.mockito
 from test.support.test_helper import request_mock
 
 

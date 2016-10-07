@@ -31,7 +31,7 @@ class UsersResourceTest(MultiUserSoledadTestBase):
     @defer.inlineCallbacks
     def test_online_users_count_uses_leap_auth_privileges(self):
 
-        response, login_request = yield self.login()
+        response, login_request = yield self.app_test_client.login()
         yield response
 
         yield self.wait_for_session_user_id_to_finish()

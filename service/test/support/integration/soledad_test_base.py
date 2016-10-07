@@ -24,6 +24,7 @@ from leap.common.events.flags import set_events_enabled
 
 
 class SoledadTestBase(unittest.TestCase):
+    _client = AppTestClient()
     # these are so long because our CI is so slow at the moment.
     DEFERRED_TIMEOUT = 120
     DEFERRED_TIMEOUT_LONG = 300
@@ -42,6 +43,7 @@ class SoledadTestBase(unittest.TestCase):
 
     @property
     def app_test_client(self):
+        return self._client
         if not hasattr(self, '_app_test_client'):
             self._app_test_client = AppTestClient()
         return self._app_test_client
@@ -62,9 +64,4 @@ class SoledadTestBase(unittest.TestCase):
 
 
 class MultiUserSoledadTestBase(SoledadTestBase):
-
-    @property
-    def app_test_client(self):
-        if not hasattr(self, '_app_test_client'):
-            self._app_test_client = MultiUserClient()
-        self._app_test_client
+    _client = MultiUserClient()
