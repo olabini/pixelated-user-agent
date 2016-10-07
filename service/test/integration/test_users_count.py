@@ -26,7 +26,7 @@ class UsersResourceTest(MultiUserSoledadTestBase):
 
     @defer.inlineCallbacks
     def wait_for_session_user_id_to_finish(self):
-        yield self.adaptor.initialize_store(self.soledad)
+        yield self.adaptor.initialize_store(self.app_test_client.soledad)
 
     @defer.inlineCallbacks
     def test_online_users_count_uses_leap_auth_privileges(self):
@@ -36,7 +36,7 @@ class UsersResourceTest(MultiUserSoledadTestBase):
 
         yield self.wait_for_session_user_id_to_finish()
 
-        when(self.user_auth).is_admin().thenReturn(True)
+        when(self.app_test_client.user_auth).is_admin().thenReturn(True)
         response, request = self.app_test_client.get(
             "/users",
             json.dumps({'csrftoken': [login_request.getCookie('XSRF-TOKEN')]}),
@@ -46,4 +46,4 @@ class UsersResourceTest(MultiUserSoledadTestBase):
 
         self.assertEqual(200, request.code)     # redirected
         self.assertEqual('{"count": 1}', request.getWrittenData())     # redirected
-        verify(self.user_auth).is_admin()
+        verify(self.app_test_client.user_auth).is_admin()

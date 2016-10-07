@@ -30,14 +30,16 @@ class IncomingMailTest(SoledadTestBase):
 
         # when
         yield MailboxIndexerListener.listen(
-            self.app_test_client.account, 'INBOX',
-            self.app_test_client.mail_store, self.search_engine)
+            self.app_test_client.account,
+            'INBOX',
+            self.app_test_client.mail_store,
+            self.app_test_client.search_engine)
         yield mail_collection.add_msg(input_mail.raw)
 
         # then
         yield self.wait_in_reactor()  # event handlers are called async, wait for it
 
-        mails, mail_count = self.search_engine.search('in:all')
+        mails, mail_count = self.app_test_client.search_engine.search('in:all')
         self.assertEqual(1, mail_count)
         self.assertEqual(1, len(mails))
 

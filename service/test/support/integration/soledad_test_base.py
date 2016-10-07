@@ -24,7 +24,7 @@ from leap.common.events.flags import set_events_enabled
 
 
 class SoledadTestBase(unittest.TestCase):
-    _client = AppTestClient()
+    Client = AppTestClient
     # these are so long because our CI is so slow at the moment.
     DEFERRED_TIMEOUT = 120
     DEFERRED_TIMEOUT_LONG = 300
@@ -43,9 +43,8 @@ class SoledadTestBase(unittest.TestCase):
 
     @property
     def app_test_client(self):
-        return self._client
         if not hasattr(self, '_app_test_client'):
-            self._app_test_client = AppTestClient()
+            self._app_test_client = self.Client()
         return self._app_test_client
 
     @defer.inlineCallbacks
@@ -53,7 +52,7 @@ class SoledadTestBase(unittest.TestCase):
         yield self.adaptor.initialize_store(self.app_test_client.soledad)
         mbox = yield self.adaptor.get_or_create_mbox(self.app_test_client.soledad, 'INBOX')
         message = self._convert_mail_to_leap_message(mail, mbox.uuid)
-        yield self.adaptor.create_msg(self.soledad, message)
+        yield self.adaptor.create_msg(self.app_test_client.soledad, message)
 
         defer.returnValue(message.get_wrapper().mdoc.doc_id)
 
@@ -64,4 +63,4 @@ class SoledadTestBase(unittest.TestCase):
 
 
 class MultiUserSoledadTestBase(SoledadTestBase):
-    _client = MultiUserClient()
+    Client = MultiUserClient

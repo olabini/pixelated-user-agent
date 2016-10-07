@@ -1,7 +1,5 @@
 import os
 
-import test.support.mockito
-
 from leap.bonafide._srp import SRPAuthError
 from mock import patch
 from mockito import mock, when, any as ANY, verify, verifyZeroInteractions, verifyNoMoreInteractions

@@ -21,7 +21,6 @@ import u1db
 from leap.mail.adaptors.soledad_indexes import MAIL_INDEXES
 from leap.soledad.common.document import SoledadDocument
 from mockito import mock, when, verify
-import test.support.mockito
 from twisted.internet import defer
 from twisted.trial.unittest import TestCase
 from leap.mail.adaptors.soledad import SoledadMailAdaptor, MailboxWrapper, ContentDocWrapper

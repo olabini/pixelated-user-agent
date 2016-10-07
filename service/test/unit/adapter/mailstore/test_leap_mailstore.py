@@ -31,7 +31,6 @@ from twisted.trial.unittest import TestCase
 from leap.mail import constants
 from twisted.internet import defer
 from mockito import mock, when, verify, any as ANY
-import test.support.mockito
 from leap.mail.adaptors.soledad import SoledadMailAdaptor, MailboxWrapper, ContentDocWrapper
 import pkg_resources
 from leap.mail.mail import Message

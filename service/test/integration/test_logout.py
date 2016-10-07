@@ -15,6 +15,7 @@
 # along with Pixelated. If not, see <http://www.gnu.org/licenses/>.
 import json
 
+from mock import patch
 from mockito import verify
 from twisted.internet import defer
 
@@ -25,11 +26,11 @@ class MultiUserLogoutTest(MultiUserSoledadTestBase):
 
     @defer.inlineCallbacks
     def wait_for_session_user_id_to_finish(self):
-        yield self.adaptor.initialize_store(self.soledad)
+        yield self.adaptor.initialize_store(self.app_test_client.soledad)
 
     @defer.inlineCallbacks
     def test_logout_deletes_services_stop_background_reactor_tasks_and_closes_soledad(self):
-        response, login_request = yield self.login()
+        response, login_request = yield self.app_test_client.login()
         yield response
 
         yield self.wait_for_session_user_id_to_finish()
@@ -42,4 +43,4 @@ class MultiUserLogoutTest(MultiUserSoledadTestBase):
         yield response
 
         self.assertEqual(302, request.responseCode)     # redirected
-        verify(self.services).close()
+        verify(self.app_test_client.services).close()

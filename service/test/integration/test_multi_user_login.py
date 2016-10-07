@@ -13,6 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with Pixelated. If not, see <http://www.gnu.org/licenses/>.
+from mock import patch
+
 from twisted.internet import defer
 
 from test.support.integration import load_mail_from_file
@@ -31,7 +33,7 @@ class MultiUserLoginTest(MultiUserSoledadTestBase):
 
     @defer.inlineCallbacks
     def test_logged_in_users_sees_resources(self):
-        response, login_request = yield self.login()
+        response, login_request = yield self.app_test_client.login()
         yield response
         mail = load_mail_from_file('mbox00000000')
         mail_id = yield self._create_mail_in_soledad(mail)
@@ -45,7 +47,7 @@ class MultiUserLoginTest(MultiUserSoledadTestBase):
 
     @defer.inlineCallbacks
     def test_wrong_credentials_cannot_access_resources(self):
-        response, login_request = self.login('username', 'wrong_password')
+        response, login_request = self.app_test_client.login('username', 'wrong_password')
         response_str = yield response
         self.assertEqual(401, login_request.responseCode)
         self.assertIn('Invalid credentials', login_request.written)
